@@ -47,16 +47,31 @@ function findLocation() {
 
             // Add marker for the found location
             var marker = L.marker([location.lat, location.lng]).addTo(map);
-            marker.bindPopup(`<b>Building:</b> ${location.building}<br><b>Floor:</b> ${location.floor}<br><b>Room:</b> ${location.room}`).openPopup();
+
+            // Create the popup with a larger "Open in Maps" button
+            var popupContent = `
+                <b>Building:</b> ${location.building}<br>
+                <b>Floor:</b> ${location.floor}<br>
+                <b>Room:</b> ${location.room}<br><br>
+                <button id="popupButton" style="
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    background-color: #4285F4;
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                " onclick="openGoogleMapsFromPopup(${location.lat}, ${location.lng})">
+                    Open in Maps
+                </button>
+            `;
+
+            marker.bindPopup(popupContent).openPopup();
 
             // Pan the map to the location
             map.setView([location.lat, location.lng], 17);
-
-            // Store the selected location for the directions button
-            selectedLocation = location;
-
-            // Show the "Get Directions" button
-            document.getElementById("directionButton").style.display = "block";
 
             found = true;
         }
@@ -64,17 +79,11 @@ function findLocation() {
 
     if (!found) {
         alert("Roll number not found in the database.");
-        // Hide the "Get Directions" button
-        document.getElementById("directionButton").style.display = "none";
     }
 }
 
-// Function to open Google Maps with directions
-function openGoogleMaps() {
-    if (selectedLocation) {
-        // Construct the Google Maps direction URL
-        var googleMapsURL = `https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.lat},${selectedLocation.lng}`;
-        // Open the URL in a new tab or redirect the user
-        window.open(googleMapsURL, '_blank');
-    }
+// Function to open Google Maps with directions from the popup
+function openGoogleMapsFromPopup(lat, lng) {
+    var googleMapsURL = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    window.open(googleMapsURL, '_blank');
 }

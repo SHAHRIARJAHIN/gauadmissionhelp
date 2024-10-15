@@ -48,7 +48,7 @@ function findLocation() {
             // Add marker for the found location
             var marker = L.marker([location.lat, location.lng]).addTo(map);
 
-            // Create the popup with a larger "Open in Maps" button
+            // Create the popup with "Open in Maps" button
             var popupContent = `
                 <b>Building:</b> ${location.building}<br>
                 <b>Floor:</b> ${location.floor}<br>
@@ -72,6 +72,9 @@ function findLocation() {
 
             // Pan the map to the location
             map.setView([location.lat, location.lng], 17);
+
+            // Scroll to the map area smoothly
+            document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
 
             found = true;
         }

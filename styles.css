@@ -5,14 +5,39 @@
     font-family: Arial, sans-serif;
     background-color: rgb(255, 255, 255);
 }
+a {
+    text-decoration: none;
+  }
+img{
+margin:0px; 
+width: 120px;
+padding: 0;
+}
+h1{
+    color: rgb(255, 0, 0);
+    font-size:36px;
+}
+.its{
+    display: block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    font: arial;
+    padding: 0;
+    color: blue;
+
+}
+.jahin{
+color: gray;
+padding: 0%;
+}
 #map{
     border: #000000;
     border-style: double;
 }
 #rollNumberInput {
     height: 1.5em;
-    width:10em;
-    font-size: 20pt;
+    font-size: 30pt;
+    position: relative;
     text-align: center;
 
 }

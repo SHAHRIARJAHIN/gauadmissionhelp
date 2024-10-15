@@ -14,21 +14,23 @@
             width: 100%;
         }
     </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <section id="hero" class="d-flex align-items-center portfolio_break ng-scope" style="margin-top:5px; ;">
+    <section id="hero" class="d-flex align-items-center portfolio_break ng-scope" style="margin-top:2px; ;">
         <div class="container">
             <div align="center">
-                <div>
+                
                     <div>
-                        <img src="/img/bsmrauits.png" style=" width: 120px"><br><br>
+                        <img src="/img/bsmrauits.png" style=" margin:0px; width: 120px">
 
 
                         <p data-aos="fade-up" style="color: rgb(63, 9, 211);font-size:36px; margin:0; padding:0;"
                             class="itsname">IT SOCIETY, BSMRAU</p>
+                            <a href="https://www.facebook.com/shahriarmorshedjahin">&copy;JAHIN</a>
                     </div>
-                </div>
+                
             </div>
         </div>
     </section>
@@ -36,13 +38,13 @@
     <div class="container">
         <div align="center">
             <div>
-            <h1 style="color: rgb(255, 0, 0);font-size:36px;""> Find Your Exam Room Location</h1>
+            <h1 style="color: rgb(255, 0, 0);font-size:38px;""> Find Your Exam Room Location</h1>
         </div>
         <div>
             <input type="number" id="rollNumberInput" placeholder="Enter Roll Number">
         </div>
         <div>
-            <button id="findlocation" onclick="findLocation()">Find Location</button>
+            <button class="buttonf" id="findlocation" onclick="findLocation()">Find Location</button>
         
         </div>
     </div>
@@ -52,7 +54,7 @@
     <div class="container">
         <div align="center">
             <!-- Button to open Google Maps directions -->
-    <button id="directionButton" style="display:none;" onclick="openGoogleMaps()">Get Directions</button>
+    <button class="buttond" id="directionButton" style="display:none;" onclick="openGoogleMaps()">Get Directions</button>
         </div>
     </div>
 </section>

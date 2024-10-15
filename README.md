@@ -1,1 +1,0 @@
-# bsmrau_admissionhelp

@@ -89,15 +89,16 @@ padding: 0%;
     align-items: center;
 }
 
-/* Optional: You can add animation to the image if needed */
+/* Flip the image horizontally */
 #preloader img {
     width: 150px;
     height: auto;
-    animation: flip 3s linear infinite;
+    transform: scaleX(-1); /* Flip horizontally */
+    animation: spin 2s linear infinite;
 }
 
 /* Optional: Keyframes for animation */
-@keyframes flip {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+@keyframes spin {
+    from { transform: rotate(0deg) scaleX(-1); } /* Ensure it stays flipped during rotation */
+    to { transform: rotate(360deg) scaleX(-1); } /* Ensure it stays flipped during rotation */
 }

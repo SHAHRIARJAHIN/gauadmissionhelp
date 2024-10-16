@@ -93,11 +93,11 @@ padding: 0%;
 #preloader img {
     width: 150px;
     height: auto;
-    animation: spin 3s linear infinite;
+    animation: flip 3s linear infinite;
 }
 
 /* Optional: Keyframes for animation */
-@keyframes spin {
+@keyframes flip {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }

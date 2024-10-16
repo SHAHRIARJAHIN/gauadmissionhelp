@@ -90,10 +90,3 @@ function openGoogleMapsFromPopup(lat, lng) {
     var googleMapsURL = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
     window.open(googleMapsURL, '_blank');
 }
-window.addEventListener('load', function() {
-    // Hide the preloader
-    document.getElementById('preloader').style.display = 'none';
-
-    // Show the content
-    document.getElementById('content').style.display = 'block';
-});

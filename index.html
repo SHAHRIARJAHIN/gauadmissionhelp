@@ -9,44 +9,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Preloader styles */
-        #preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #007bff, #00d4ff);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        
-        .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 2s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Style for the map */
-        #map {
-            height: 30em;
-            width: 100%;
-            border-radius: 15px;
-            margin-top: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-    </style>
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -57,60 +19,56 @@
     </div>
 
     <div id="content" style="display: none;">
-        <section style="margin-top:2px;">
-            <div class="container">
-                <div align="center">
-                    <div> 
-                        <a href="https://www.facebook.com/bsmrauits"><img src="https://i.postimg.cc/0QwdRHgZ/bsmrauits.png"></a>
-                        <a class="its" href="https://www.facebook.com/bsmrauits">IT SOCIETY, Gazipur Agricultural University</a>
-                        <a class="jahin" href="https://www.facebook.com/shahriarmorshedjahin">Developed by JAHIN</a>
-                        <div class="language-toggle">
-                            <button id="languageToggle" class="language-btn active" data-lang="en">EN</button>
-                            <button id="languageToggle" class="language-btn" data-lang="bn">BN</button>
-                        </div>
-                        <button id="darkModeToggle" class="mode-toggle">
-                            <i class="fas fa-moon"></i>
-                        </button>
-                        <marquee style="color: rgb(255, 0, 0);"> Site is Under Development </marquee>
-                    </div>
-                </div>
+        <!-- Floating Language Toggle -->
+        <div class="floating-language">
+            <button class="language-btn active" data-lang="en">EN</button>
+            <button class="language-btn" data-lang="bn">BN</button>
+        </div>
+
+        <!-- Floating Dark Mode Toggle -->
+        <div class="floating-dark-mode">
+            <button id="darkModeToggle" class="mode-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+
+        <!-- Floating Speak Button (will be shown when location found) -->
+        <div class="floating-speak" id="floatingSpeak" style="display: none;">
+            <button id="speakResults" class="speak-btn">
+                <i class="fas fa-volume-up"></i>
+            </button>
+        </div>
+
+        <!-- Header Section -->
+        <header class="header-container">
+            <div class="header-content">
+                <a href="https://www.facebook.com/bsmrauits"><img src="https://i.postimg.cc/0QwdRHgZ/bsmrauits.png"></a>
+                <a class="its" href="https://www.facebook.com/bsmrauits">IT SOCIETY, Gazipur Agricultural University</a>
+                <a class="jahin" href="https://www.facebook.com/shahriarmorshedjahin">Developed by JAHIN</a>
+                <marquee style="color: rgb(255, 0, 0);"> Site is Under Development </marquee>
             </div>
-        </section>
-        <section>
-            <div class="container">
-                <div align="center">
-                    <div>
-                        <h1 id="mainHeading">Find Your Exam Room Location</h1>
-                    </div>
-                    <div class="search-box">
-                        <input type="number" id="rollNumberInput" placeholder="Enter Roll Number" autocomplete="off">
-                        <button id="voiceSearch" class="voice-btn">
-                            <i class="fas fa-microphone"></i>
-                        </button>
-                    </div>
-                    <div>
-                        <button class="buttonf" id="findlocation" onclick="findLocation()">
-                            <span id="findBtnText">Find Location</span>
-                        </button>
-                        <button id="speakResults" class="speak-btn" style="display:none;">
-                            <i class="fas fa-volume-up"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section>
-            <div class="container">
-                <div align="center">
-                    <!-- Button to open Google Maps directions -->
-                    <button class="buttond" id="directionButton" style="display:none;" onclick="openGoogleMaps()">
-                        <span id="directionBtnText">Get Directions</span>
+        </header>
+
+        <!-- Search Section (overlay on map) -->
+        <div class="search-overlay">
+            <div class="search-container">
+                <h1 id="mainHeading">Find Your Exam Room Location</h1>
+                <div class="search-box">
+                    <input type="number" id="rollNumberInput" placeholder="Enter Roll Number" autocomplete="off">
+                    <button id="voiceSearch" class="voice-btn">
+                        <i class="fas fa-microphone"></i>
                     </button>
                 </div>
+                <button class="buttonf" id="findlocation" onclick="findLocation()">
+                    <span id="findBtnText">Find Location</span>
+                </button>
+                <button class="buttond" id="directionButton" style="display:none;" onclick="openGoogleMaps()">
+                    <span id="directionBtnText">Get Directions</span>
+                </button>
             </div>
-        </section>
+        </div>
 
-        <!-- Container for the map -->
+        <!-- Map Container -->
         <div id="map"></div>
     </div>
 

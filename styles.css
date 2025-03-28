@@ -125,7 +125,7 @@ body.bengali {
 
 /* Marker Popup Positioning */
 .leaflet-popup {
-  bottom: 33% !important;
+  bottom: 20% !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
   top: auto !important;

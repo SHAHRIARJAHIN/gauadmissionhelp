@@ -167,8 +167,8 @@ function findLocation() {
         // Bind popup with custom positioning
         marker.bindPopup(popupContent, {
             className: 'custom-popup',
-            autoPan: false,
-            closeButton: true,
+            autoPan: true,
+            closeButton: falce,
             offset: L.point(0, -50)
         }).openPopup();
         

@@ -222,19 +222,22 @@ function toggleLanguage() {
     currentLanguage = currentLanguage === 'en' ? 'bn' : 'en';
     translatePage(currentLanguage);
     document.body.classList.toggle('bengali', currentLanguage === 'bn');
-    
-    // Force update the toggle button text immediately
-    document.getElementById('languageToggleText').textContent = 
-        currentLanguage === 'en' ? translations['en'].toggleLanguage : translations['bn'].toggleLanguage;
 }
+
 
 // Translate page
 function translatePage(lang) {
+    // Update all text elements
     document.getElementById('mainHeading').textContent = translations[lang].title;
     document.getElementById('rollNumberInput').placeholder = translations[lang].placeholder;
     document.getElementById('findBtnText').textContent = translations[lang].findBtn;
     document.getElementById('directionBtnText').textContent = translations[lang].directionBtn;
-    document.getElementById('languageToggleText').textContent = translations[lang].toggleLanguage;
+    
+    // Safely update the language toggle text
+    const toggleText = document.getElementById('languageToggleText');
+    if (toggleText) {
+        toggleText.textContent = translations[lang].toggleLanguage;
+    }
 }
 
 // Voice search

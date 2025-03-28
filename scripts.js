@@ -123,6 +123,100 @@ function setupEventListeners() {
     document.getElementById('directionButton').addEventListener('click', openGoogleMaps);
 }
 
+// Find location function
+function findLocation() {
+    const rollInput = document.getElementById('rollNumberInput').value;
+    if (!rollInput || rollInput.length < 5) {
+        showNotFoundPopup(translations[currentLanguage].notFound);
+        return;
+    }
+
+    const rollNumber = parseInt(rollInput);
+    const foundLocation = locations.find(loc => rollNumber >= loc.rollFrom && rollNumber <= loc.rollTo);
+    
+    // Clear previous markers
+    map.eachLayer(layer => {
+        if (layer instanceof L.Marker) {
+            map.removeLayer(layer);
+        }
+    });
+    
+    // Hide buttons initially
+    document.getElementById('directionButton').style.display = 'none';
+    document.getElementById('floatingSpeak').style.display = 'none';
+    
+    if (foundLocation) {
+        // Add marker
+        const marker = L.marker([foundLocation.lat, foundLocation.lng], {
+            riseOnHover: true
+        }).addTo(map);
+        
+        // Create popup content
+        const popupContent = `
+            <div style="text-align:center;padding:10px;">
+                <b>${translations[currentLanguage].building}:</b> ${foundLocation.building}<br>
+                <b>${translations[currentLanguage].floor}:</b> ${foundLocation.floor}<br>
+                <b>${translations[currentLanguage].room}:</b> ${foundLocation.room}<br><br>
+                <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${foundLocation.lat},${foundLocation.lng}', '_blank')" 
+                    style="padding:10px 20px;background:#4285F4;color:white;border:none;border-radius:8px;cursor:pointer;">
+                    ${currentLanguage === 'en' ? 'Open in Maps' : 'ম্যাপে খুলুন'}
+                </button>
+            </div>
+        `;
+        
+        // Bind popup with custom positioning
+        marker.bindPopup(popupContent, {
+            className: 'custom-popup',
+            autoPan: true,
+            closeButton: false,
+            offset: L.point(0, -500),
+            maxWidth: 300
+        }).openPopup();
+        
+        // Adjust view to show marker in upper portion while popup appears at bottom
+        const center = map.getCenter();
+        const newCenter = L.latLng(
+            foundLocation.lat + (center.lat - foundLocation.lat) * 0.3,
+            foundLocation.lng
+        );
+        map.setView(newCenter, 17);
+        
+        // Store selected location and show buttons
+        selectedLocation = foundLocation;
+        document.getElementById('directionButton').style.display = 'inline-block';
+        document.getElementById('floatingSpeak').style.display = 'flex';
+    } else {
+        showNotFoundPopup(translations[currentLanguage].notFound);
+    }
+}
+
+// Show not found popup
+function showNotFoundPopup(message) {
+    const popup = L.popup()
+        .setLatLng(map.getCenter())
+        .setContent(`<div style="padding:10px;text-align:center;"><p>${message}</p></div>`)
+        .openOn(map);
+    
+    setTimeout(() => map.closePopup(popup), 3000);
+}
+
+// Open Google Maps
+function openGoogleMaps() {
+    if (selectedLocation) {
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.lat},${selectedLocation.lng}`, '_blank');
+    }
+}
+
+// Toggle dark mode
+function toggleDarkMode() {
+    isDarkMode = !isDarkMode;
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    
+    const icon = document.querySelector('#darkModeToggle i');
+    icon.classList.toggle('fa-moon', !isDarkMode);
+    icon.classList.toggle('fa-sun', isDarkMode);
+}
+
 // Toggle language
 function toggleLanguage() {
     currentLanguage = currentLanguage === 'en' ? 'bn' : 'en';
@@ -139,9 +233,49 @@ function translatePage(lang) {
     document.getElementById('languageToggleText').textContent = translations[lang].toggleLanguage;
 }
 
-// [Rest of your existing functions remain the same...]
-// (findLocation, showNotFoundPopup, openGoogleMaps, toggleDarkMode, 
-// startVoiceSearch, speakLocationDetails, etc.)
+// Voice search
+function startVoiceSearch() {
+    const voiceBtn = document.getElementById('voiceSearch');
+    
+    if (!('webkitSpeechRecognition' in window)) {
+        showNotFoundPopup(translations[currentLanguage].voiceNotSupported);
+        return;
+    }
+    
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = currentLanguage === 'bn' ? 'bn-BD' : 'en-US';
+    recognition.interimResults = false;
+    
+    recognition.onstart = () => voiceBtn.classList.add('listening');
+    recognition.onerror = (event) => {
+        if (event.error === 'not-allowed') {
+            showNotFoundPopup(translations[currentLanguage].permissionDenied);
+        }
+        voiceBtn.classList.remove('listening');
+    };
+    recognition.onend = () => voiceBtn.classList.remove('listening');
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript.trim();
+        document.getElementById('rollNumberInput').value = transcript.replace(/\D/g, '');
+        findLocation();
+    };
+    
+    recognition.start();
+}
+
+// Text-to-speech
+function speakLocationDetails() {
+    if (!selectedLocation || !speechSynthesis) return;
+    
+    const utterance = new SpeechSynthesisUtterance();
+    utterance.lang = currentLanguage === 'bn' ? 'bn-BD' : 'en-US';
+    
+    utterance.text = currentLanguage === 'en' 
+        ? `Your exam is in ${selectedLocation.building}, ${selectedLocation.floor}, room ${selectedLocation.room}`
+        : `আপনার পরীক্ষা ${selectedLocation.building}, ${selectedLocation.floor}, রুম ${selectedLocation.room}-এ`;
+    
+    speechSynthesis.speak(utterance);
+}
 
 // Hide preloader
 window.addEventListener('load', function() {

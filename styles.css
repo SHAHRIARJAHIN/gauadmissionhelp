@@ -1,104 +1,250 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap');
+
 * {
     margin: 0;
-    padding: 2px;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    background-color: rgb(255, 255, 255);
-}
-marquee{
-    color: rgb(255, 0, 0);
-}
-a {
-    text-decoration: none;
-  }
-img{
-margin:0px; 
-width: 120px;
-padding: 0;
-}
-h1{
-    color: rgb(255, 0, 0);
-    font-size:36px;
-}
-.its{
-    display: block;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 30px;
-    font: arial;
     padding: 0;
-    color: blue;
-
-}
-.jahin{
-color: gray;
-padding: 0%;
-}
-#map{
-    border: #000000;
-    border-style: double;
-}
-#rollNumberInput {
-    height: 2em;
-    font-size: 20pt;
-    position: relative;
-    text-align: center;
-
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
 }
 
-#rollNumberInput input {
-    background-color: #FFF
+body {
+    background: linear-gradient(135deg, #007bff, #00d4ff);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    transition: background 0.5s ease;
 }
 
-.buttonf {
-    background-color: #ff0606;
-    color: #FFFFFF;
-    padding: 15px;
-    border-radius: 15px;
-    -moz-border-radius: 15px;
-    -webkit-border-radius: 15px;
-    margin: 10px;
-    font-size: 20px;
-}
-
-.buttond {
-    background-color: #06ff7e;
-    color: #000000;
-    padding: 15px;
-    border-radius: 15px;
-    -moz-border-radius: 15px;
-    -webkit-border-radius: 15px;
-    margin: 10px;
-    font-size: 20px;
+body.bengali {
+    font-family: 'Hind Siliguri', sans-serif;
 }
 
 .container {
-    margin: 0%;
-    padding: 0;
+    width: 90%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 25px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin: 15px 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
-/* Preloader Styling */
-#preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
+
+h1 {
+    color: white;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.its, .jahin {
+    display: block;
+    color: white;
+    margin: 10px 0;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.jahin {
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    height: 100%;
-    background-color: #fff; /* Preloader background color */
-    z-index: 9999; /* Make sure it's on top */
+    margin: 20px 0;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.buttonf, .buttond {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 10px 5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.buttonf {
+    background: #ffffff;
+    color: #007bff;
+}
+
+.buttond {
+    background: #34a853;
+    color: white;
+}
+
+.buttonf:hover, .buttond:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.buttonf:active, .buttond:active {
+    transform: translateY(0);
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background: linear-gradient(135deg, #121212, #323232);
+}
+
+.dark-mode .container {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode h1,
+.dark-mode .its,
+.dark-mode .jahin {
+    color: #f0f0f0;
+}
+
+.dark-mode .search-box input {
+    background: rgba(30, 30, 30, 0.9);
+    color: #f0f0f0;
+}
+
+.dark-mode .buttonf {
+    background: #2c3e50;
+    color: #f0f0f0;
+}
+
+/* Voice search button */
+.voice-btn, .speak-btn, .mode-toggle {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    color: white;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Flip the image horizontally */
-#preloader img {
-    width: 150px;
-    height: auto;
-    transform: scaleX(-1); /* Flip horizontally */
-    animation: spin 2s linear infinite;
+.voice-btn:hover, .speak-btn:hover, .mode-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
 }
 
-/* Optional: Keyframes for animation */
-@keyframes spin {
-    from { transform: rotate(0deg) scaleX(-1); } /* Ensure it stays flipped during rotation */
-    to { transform: rotate(360deg) scaleX(-1); } /* Ensure it stays flipped during rotation */
+.voice-btn:active, .speak-btn:active, .mode-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Language toggle */
+.language-toggle {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+.language-btn {
+    padding: 5px 15px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.language-btn.active {
+    background: rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        border-radius: 15px;
+    }
+    
+    h1 {
+        font-size: 1.5em;
+    }
+    
+    .search-box input {
+        padding: 12px 15px;
+    }
+    
+    .buttonf, .buttond {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+    
+    #map {
+        height: 25em;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 12px;
+        border-radius: 12px;
+    }
+    
+    h1 {
+        font-size: 1.3em;
+    }
+    
+    .search-box {
+        flex-direction: column;
+    }
+    
+    .search-box input {
+        width: 100%;
+    }
+    
+    #map {
+        height: 20em;
+    }
+}
+
+/* Animation for voice search */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.listening {
+    animation: pulse 1.5s infinite;
+    background: #ff4444 !important;
 }

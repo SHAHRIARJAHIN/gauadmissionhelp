@@ -113,6 +113,34 @@ body.bengali {
   transform: scale(1.05);
 }
 
+/* Language Toggle */
+.language-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.language-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 20px;
+  background: var(--sky-blue-solid);
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  min-width: 50px;
+  text-align: center;
+}
+
+/* Dark mode language toggle */
+.dark-mode .language-btn {
+  background: #4285F4;
+  color: white;
+}
+
 /* Map Container */
 #map {
   position: fixed;
@@ -272,24 +300,6 @@ h1 {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Language Toggle */
-.language-btn {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--text-dark);
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.language-btn.active {
-  background: var(--sky-blue-solid);
-  color: white;
-  font-weight: bold;
-}
-
 /* Voice Search Button */
 .voice-btn {
   background: rgba(255, 255, 255, 0.9);
@@ -384,14 +394,9 @@ body.dark-mode {
 
 .dark-mode .voice-btn,
 .dark-mode .speak-btn,
-.dark-mode .mode-toggle,
-.dark-mode .language-btn {
+.dark-mode .mode-toggle {
   background: rgba(30, 60, 90, 0.9);
   color: var(--text-light);
-}
-
-.dark-mode .language-btn.active {
-  background: #4285F4;
 }
 
 /* Responsive Design */
@@ -479,36 +484,4 @@ body.dark-mode {
   animation: pulse 1.5s infinite;
   background: #ff4444 !important;
   color: white !important;
-}
-/* Language Toggle */
-.language-toggle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.language-btn {
-    padding: 8px 20px;
-    border: none;
-    border-radius: 20px;
-    background: var(--sky-blue-solid);
-    color: white;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.dark-mode .language-btn {
-    background: #4285F4;
-}
-
-/* Animation for language toggle */
-.language-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-  background: #4285F4;
-  color: white;
 }

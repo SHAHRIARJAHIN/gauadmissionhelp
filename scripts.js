@@ -222,6 +222,10 @@ function toggleLanguage() {
     currentLanguage = currentLanguage === 'en' ? 'bn' : 'en';
     translatePage(currentLanguage);
     document.body.classList.toggle('bengali', currentLanguage === 'bn');
+    
+    // Force update the toggle button text immediately
+    document.getElementById('languageToggleText').textContent = 
+        currentLanguage === 'en' ? translations['en'].toggleLanguage : translations['bn'].toggleLanguage;
 }
 
 // Translate page

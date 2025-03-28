@@ -69,7 +69,7 @@ function initializeMap() {
 
 // Load data from Google Sheet
 function loadLocations() {
-    const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSayNjEzlZUEQAedk3MVKbIkDZP5yEFAhfBTpUabm69vDHXEDseswF7a9NUi-kQKqZg-YBYpjBLjwBl/pub?gid=0&single=true&output=csv';
+    const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGZRQwGFGreFui52zuNH5OYHHtVuF0heys-XjDuZy2Jrg43p0PXUjcoglfTApM0olqZ2_GxWAXxy8s/pub?gid=0&single=true&output=csv';
     
     fetch(googleSheetURL)
         .then(response => response.text())

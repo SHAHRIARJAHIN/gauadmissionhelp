@@ -368,6 +368,7 @@ h1 {
 .footer {
   color: var(--text-dark);
   text-decoration: none;
+  text-align: center;
   font-size: 0.9em;
   transition: opacity 0.3s ease;
 }

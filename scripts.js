@@ -291,3 +291,17 @@ window.addEventListener('load', function() {
         map.invalidateSize();
     }, 1000);
 });
+// Toggle language
+function toggleLanguage(lang) {
+    if (lang === currentLanguage) return;
+    
+    currentLanguage = lang;
+    translatePage(lang);
+    
+    // Update active state of buttons
+    document.querySelectorAll('.language-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+    
+    document.body.classList.toggle('bengali', lang === 'bn');
+}

@@ -167,9 +167,9 @@ function findLocation() {
         // Bind popup with custom positioning
         marker.bindPopup(popupContent, {
             className: 'custom-popup',
-            autoPan: true,
-            closeButton: falce,
-            offset: L.point(0, -50)
+            autoPan: false,
+            closeButton: false,
+            offset: L.point(0, -500)
         }).openPopup();
         
         // Adjust view to show marker in upper portion while popup appears at bottom

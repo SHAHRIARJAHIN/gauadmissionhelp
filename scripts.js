@@ -292,3 +292,38 @@ window.addEventListener('load', function() {
         map.invalidateSize();
     }, 1000);
 });
+// Add at the bottom of your scripts.js
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('ServiceWorker registered');
+      })
+      .catch(err => {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+  });
+}
+
+// Add install prompt handling
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  
+  // Show your custom install button
+  const installBtn = document.createElement('button');
+  installBtn.textContent = 'Install App';
+  installBtn.classList.add('install-btn');
+  document.body.appendChild(installBtn);
+  
+  installBtn.addEventListener('click', () => {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted install');
+      }
+      deferredPrompt = null;
+    });
+  });
+});

@@ -133,8 +133,22 @@ body.bengali {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   min-width: 50px;
   text-align: center;
+  transition: all 0.3s ease;
+}
+.language-btn span {
+  display: inline-block;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
+/* Animation for language toggle */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.language-btn .language-text {
+  animation: fadeIn 0.3s ease-out;
+}
 /* Dark mode language toggle */
 .dark-mode .language-btn {
   background: #4285F4;

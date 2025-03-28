@@ -84,6 +84,7 @@ function loadLocations() {
                     lng: parseFloat(lng)
                 };
             });
+            console.log('Locations loaded:', locations); // Debug log
         })
         .catch(error => console.error('Error loading locations:', error));
 }
@@ -112,7 +113,10 @@ function setupEventListeners() {
     });
     
     // Find location button
-    document.getElementById('findlocation').addEventListener('click', findLocation);
+    document.getElementById('findlocation').addEventListener('click', function(e) {
+        e.preventDefault();
+        findLocation();
+    });
     
     // Directions button
     document.getElementById('directionButton').addEventListener('click', openGoogleMaps);
@@ -120,7 +124,13 @@ function setupEventListeners() {
 
 // Find location function
 function findLocation() {
-    const rollNumber = parseInt(document.getElementById('rollNumberInput').value);
+    const rollInput = document.getElementById('rollNumberInput').value;
+    if (!rollInput || rollInput.length < 5) {
+        showNotFoundPopup("Please enter a 5-digit roll number");
+        return;
+    }
+
+    const rollNumber = parseInt(rollInput);
     const foundLocation = locations.find(loc => rollNumber >= loc.rollFrom && rollNumber <= loc.rollTo);
     
     // Clear previous markers
@@ -143,7 +153,7 @@ function findLocation() {
             <b>${translations[currentLanguage].building}:</b> ${foundLocation.building}<br>
             <b>${translations[currentLanguage].floor}:</b> ${foundLocation.floor}<br>
             <b>${translations[currentLanguage].room}:</b> ${foundLocation.room}<br><br>
-            <button onclick="openGoogleMapsFromPopup(${foundLocation.lat}, ${foundLocation.lng})" 
+            <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${foundLocation.lat},${foundLocation.lng}', '_blank')" 
                 style="padding: 10px 20px; background: #4285F4; color: white; border: none; border-radius: 8px; cursor: pointer;">
                 ${currentLanguage === 'en' ? 'Open in Maps' : 'ম্যাপে খুলুন'}
             </button>
@@ -156,17 +166,17 @@ function findLocation() {
         selectedLocation = foundLocation;
         document.getElementById('directionButton').style.display = 'inline-block';
         document.getElementById('floatingSpeak').style.display = 'flex';
-    } else if (document.getElementById('rollNumberInput').value.length > 0) {
-        showNotFoundPopup();
+    } else {
+        showNotFoundPopup(translations[currentLanguage].notFound);
     }
 }
 
 // Show not found popup
-function showNotFoundPopup() {
+function showNotFoundPopup(message) {
     const popup = L.popup()
         .setLatLng(map.getCenter())
         .setContent(`<div style="padding: 10px; text-align: center;">
-            <p>${translations[currentLanguage].notFound}</p>
+            <p>${message}</p>
         </div>`)
         .openOn(map);
     
@@ -178,11 +188,6 @@ function openGoogleMaps() {
     if (selectedLocation) {
         window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.lat},${selectedLocation.lng}`, '_blank');
     }
-}
-
-// Open from popup
-function openGoogleMapsFromPopup(lat, lng) {
-    window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
 }
 
 // Toggle dark mode
@@ -232,7 +237,7 @@ function speakLocationDetails() {
     const utterance = new SpeechSynthesisUtterance();
     utterance.lang = currentLanguage === 'bn' ? 'bn-BD' : 'en-US';
     
-    utterance.text = currentLanguage === 'en' 
+   utterance.text = currentLanguage === 'en' 
         ? `Your exam is in ${selectedLocation.building}, ${selectedLocation.floor}, room ${selectedLocation.room}`
         : `আপনার পরীক্ষা ${selectedLocation.building}, ${selectedLocation.floor}, রুম ${selectedLocation.room}-এ`;
     

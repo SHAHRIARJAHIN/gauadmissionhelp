@@ -47,12 +47,12 @@ document.addEventListener('DOMContentLoaded', function() {
 // Map initialization
 function initializeMap() {
     map = L.map('map', {
-        zoomControl: false
+        zoomControl: false,
+        attributionControl: false
     }).setView([24.036253972589652, 90.3977985470635], 16);
 
     L.tileLayer(`https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}&key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao`, {
-        maxZoom: 20,
-        attribution: '&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+        maxZoom: 20
     }).addTo(map);
 
     L.control.zoom({
@@ -84,7 +84,7 @@ function loadLocations() {
                     lng: parseFloat(lng)
                 };
             });
-            console.log('Locations loaded:', locations); // Debug log
+            console.log('Locations loaded:', locations);
         })
         .catch(error => console.error('Error loading locations:', error));
 }
@@ -119,7 +119,11 @@ function setupEventListeners() {
     });
     
     // Directions button
-    document.getElementById('directionButton').addEventListener('click', openGoogleMaps);
+    document.getElementById('directionButton').addEventListener('click', function() {
+        if (selectedLocation) {
+            window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.lat},${selectedLocation.lng}`, '_blank');
+        }
+    });
 }
 
 // Find location function
@@ -143,29 +147,36 @@ function findLocation() {
     // Hide buttons initially
     document.getElementById('directionButton').style.display = 'none';
     document.getElementById('floatingSpeak').style.display = 'none';
+    document.getElementById('markerPopupContainer').classList.remove('active');
     
     if (foundLocation) {
-        // Add marker
-        const marker = L.marker([foundLocation.lat, foundLocation.lng]).addTo(map);
+        // Add invisible marker to map
+        const marker = L.marker([foundLocation.lat, foundLocation.lng], {
+            opacity: 0
+        }).addTo(map);
         
-        // Create popup content
+        // Create popup content for our custom container
         const popupContent = `
-            <b>${translations[currentLanguage].building}:</b> ${foundLocation.building}<br>
-            <b>${translations[currentLanguage].floor}:</b> ${foundLocation.floor}<br>
-            <b>${translations[currentLanguage].room}:</b> ${foundLocation.room}<br><br>
-            <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${foundLocation.lat},${foundLocation.lng}', '_blank')" 
-                style="padding: 10px 20px; background: #4285F4; color: white; border: none; border-radius: 8px; cursor: pointer;">
-                ${currentLanguage === 'en' ? 'Open in Maps' : 'ম্যাপে খুলুন'}
+            <h3>${translations[currentLanguage].title}</h3>
+            <p><strong>${translations[currentLanguage].building}:</strong> ${foundLocation.building}</p>
+            <p><strong>${translations[currentLanguage].floor}:</strong> ${foundLocation.floor}</p>
+            <p><strong>${translations[currentLanguage].room}:</strong> ${foundLocation.room}</p>
+            <button class="buttond" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${foundLocation.lat},${foundLocation.lng}', '_blank')">
+                ${translations[currentLanguage].directionBtn}
             </button>
         `;
         
-        marker.bindPopup(popupContent).openPopup();
-        map.setView([foundLocation.lat, foundLocation.lng], 17);
+        // Insert into our custom popup container
+        document.getElementById('popupContent').innerHTML = popupContent;
+        document.getElementById('markerPopupContainer').classList.add('active');
         
         // Store selected location and show buttons
         selectedLocation = foundLocation;
         document.getElementById('directionButton').style.display = 'inline-block';
         document.getElementById('floatingSpeak').style.display = 'flex';
+        
+        // Center map on location
+        map.setView([foundLocation.lat, foundLocation.lng], 17);
     } else {
         showNotFoundPopup(translations[currentLanguage].notFound);
     }
@@ -173,21 +184,15 @@ function findLocation() {
 
 // Show not found popup
 function showNotFoundPopup(message) {
-    const popup = L.popup()
-        .setLatLng(map.getCenter())
-        .setContent(`<div style="padding: 10px; text-align: center;">
+    document.getElementById('popupContent').innerHTML = `
+        <div style="text-align: center; color: var(--error-red);">
             <p>${message}</p>
-        </div>`)
-        .openOn(map);
-    
-    setTimeout(() => map.closePopup(popup), 3000);
-}
-
-// Open Google Maps
-function openGoogleMaps() {
-    if (selectedLocation) {
-        window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.lat},${selectedLocation.lng}`, '_blank');
-    }
+        </div>
+    `;
+    document.getElementById('markerPopupContainer').classList.add('active');
+    setTimeout(() => {
+        document.getElementById('markerPopupContainer').classList.remove('active');
+    }, 3000);
 }
 
 // Toggle dark mode
@@ -237,7 +242,7 @@ function speakLocationDetails() {
     const utterance = new SpeechSynthesisUtterance();
     utterance.lang = currentLanguage === 'bn' ? 'bn-BD' : 'en-US';
     
-   utterance.text = currentLanguage === 'en' 
+    utterance.text = currentLanguage === 'en' 
         ? `Your exam is in ${selectedLocation.building}, ${selectedLocation.floor}, room ${selectedLocation.room}`
         : `আপনার পরীক্ষা ${selectedLocation.building}, ${selectedLocation.floor}, রুম ${selectedLocation.room}-এ`;
     

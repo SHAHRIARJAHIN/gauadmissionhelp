@@ -48,11 +48,12 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeMap() {
     map = L.map('map', {
         zoomControl: false,
-        attributionControl: false
+        preferCanvas: true // Better performance for markers
     }).setView([24.036253972589652, 90.3977985470635], 16);
 
     L.tileLayer(`https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}&key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao`, {
-        maxZoom: 20
+        maxZoom: 20,
+        attribution: '&copy; <a href="https://www.google.com/maps">Google Maps</a>'
     }).addTo(map);
 
     L.control.zoom({
@@ -119,18 +120,14 @@ function setupEventListeners() {
     });
     
     // Directions button
-    document.getElementById('directionButton').addEventListener('click', function() {
-        if (selectedLocation) {
-            window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.lat},${selectedLocation.lng}`, '_blank');
-        }
-    });
+    document.getElementById('directionButton').addEventListener('click', openGoogleMaps);
 }
 
 // Find location function
 function findLocation() {
     const rollInput = document.getElementById('rollNumberInput').value;
     if (!rollInput || rollInput.length < 5) {
-        showNotFoundPopup("Please enter a 5-digit roll number");
+        showNotFoundPopup(translations[currentLanguage].notFound);
         return;
     }
 
@@ -147,36 +144,46 @@ function findLocation() {
     // Hide buttons initially
     document.getElementById('directionButton').style.display = 'none';
     document.getElementById('floatingSpeak').style.display = 'none';
-    document.getElementById('markerPopupContainer').classList.remove('active');
     
     if (foundLocation) {
-        // Add invisible marker to map
+        // Add marker
         const marker = L.marker([foundLocation.lat, foundLocation.lng], {
-            opacity: 0
+            riseOnHover: true
         }).addTo(map);
         
-        // Create popup content for our custom container
+        // Create popup content
         const popupContent = `
-            <h3>${translations[currentLanguage].title}</h3>
-            <p><strong>${translations[currentLanguage].building}:</strong> ${foundLocation.building}</p>
-            <p><strong>${translations[currentLanguage].floor}:</strong> ${foundLocation.floor}</p>
-            <p><strong>${translations[currentLanguage].room}:</strong> ${foundLocation.room}</p>
-            <button class="buttond" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${foundLocation.lat},${foundLocation.lng}', '_blank')">
-                ${translations[currentLanguage].directionBtn}
-            </button>
+            <div style="text-align:center;padding:10px;">
+                <b>${translations[currentLanguage].building}:</b> ${foundLocation.building}<br>
+                <b>${translations[currentLanguage].floor}:</b> ${foundLocation.floor}<br>
+                <b>${translations[currentLanguage].room}:</b> ${foundLocation.room}<br><br>
+                <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${foundLocation.lat},${foundLocation.lng}', '_blank')" 
+                    style="padding:10px 20px;background:#4285F4;color:white;border:none;border-radius:8px;cursor:pointer;">
+                    ${currentLanguage === 'en' ? 'Open in Maps' : 'ম্যাপে খুলুন'}
+                </button>
+            </div>
         `;
         
-        // Insert into our custom popup container
-        document.getElementById('popupContent').innerHTML = popupContent;
-        document.getElementById('markerPopupContainer').classList.add('active');
+        // Bind popup with custom positioning
+        marker.bindPopup(popupContent, {
+            className: 'custom-popup',
+            autoPan: false,
+            closeButton: true,
+            offset: L.point(0, -10)
+        }).openPopup();
+        
+        // Adjust view to show marker in upper portion while popup appears at bottom
+        const center = map.getCenter();
+        const newCenter = L.latLng(
+            foundLocation.lat + (center.lat - foundLocation.lat) * 0.3,
+            foundLocation.lng
+        );
+        map.setView(newCenter, 17);
         
         // Store selected location and show buttons
         selectedLocation = foundLocation;
         document.getElementById('directionButton').style.display = 'inline-block';
         document.getElementById('floatingSpeak').style.display = 'flex';
-        
-        // Center map on location
-        map.setView([foundLocation.lat, foundLocation.lng], 17);
     } else {
         showNotFoundPopup(translations[currentLanguage].notFound);
     }
@@ -184,15 +191,19 @@ function findLocation() {
 
 // Show not found popup
 function showNotFoundPopup(message) {
-    document.getElementById('popupContent').innerHTML = `
-        <div style="text-align: center; color: var(--error-red);">
-            <p>${message}</p>
-        </div>
-    `;
-    document.getElementById('markerPopupContainer').classList.add('active');
-    setTimeout(() => {
-        document.getElementById('markerPopupContainer').classList.remove('active');
-    }, 3000);
+    const popup = L.popup()
+        .setLatLng(map.getCenter())
+        .setContent(`<div style="padding:10px;text-align:center;"><p>${message}</p></div>`)
+        .openOn(map);
+    
+    setTimeout(() => map.closePopup(popup), 3000);
+}
+
+// Open Google Maps
+function openGoogleMaps() {
+    if (selectedLocation) {
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.lat},${selectedLocation.lng}`, '_blank');
+    }
 }
 
 // Toggle dark mode

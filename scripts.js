@@ -97,16 +97,16 @@ function setupEventListeners() {
     speakResults.addEventListener('click', speakLocationDetails);
     
     // Language toggle
-    const languageToggles = document.querySelectorAll('#languageToggle');
+    const languageToggles = document.querySelectorAll('.language-btn');
     languageToggles.forEach(button => {
         button.addEventListener('click', () => toggleLanguage(button.dataset.lang));
     });
 }
 
-// Handle real-time search
+// Handle real-time search (after 5 digits)
 function handleRealTimeSearch() {
     const rollNumber = document.getElementById('rollNumberInput').value;
-    if (rollNumber.length >= 3) { // Only search when at least 3 digits are entered
+    if (rollNumber.length === 5) {
         findLocation();
     }
 }
@@ -125,7 +125,7 @@ function findLocation() {
     
     // Hide buttons initially
     document.getElementById('directionButton').style.display = 'none';
-    document.getElementById('speakResults').style.display = 'none';
+    document.getElementById('floatingSpeak').style.display = 'none';
     
     if (foundLocation) {
         // Add marker for the found location
@@ -148,10 +148,26 @@ function findLocation() {
         // Store selected location and show buttons
         selectedLocation = foundLocation;
         document.getElementById('directionButton').style.display = 'inline-block';
-        document.getElementById('speakResults').style.display = 'inline-block';
+        document.getElementById('floatingSpeak').style.display = 'flex';
     } else if (document.getElementById('rollNumberInput').value.length > 0) {
-        alert(translations[currentLanguage].notFound);
+        // Show popup instead of alert
+        showNotFoundPopup();
     }
+}
+
+// Show not found popup
+function showNotFoundPopup() {
+    const popup = L.popup()
+        .setLatLng(map.getCenter())
+        .setContent(`<div style="padding: 10px; text-align: center;">
+            <p>${translations[currentLanguage].notFound}</p>
+        </div>`)
+        .openOn(map);
+    
+    // Close popup after 3 seconds
+    setTimeout(() => {
+        map.closePopup(popup);
+    }, 3000);
 }
 
 // Open Google Maps with directions
@@ -186,7 +202,7 @@ function startVoiceSearch() {
     const voiceBtn = document.getElementById('voiceSearch');
     
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        alert(translations[currentLanguage].voiceNotSupported);
+        showNotFoundPopup(translations[currentLanguage].voiceNotSupported);
         return;
     }
     
@@ -198,7 +214,6 @@ function startVoiceSearch() {
     
     recognition.onstart = function() {
         voiceBtn.classList.add('listening');
-        alert(translations[currentLanguage].listenPrompt);
     };
     
     recognition.onresult = function(event) {
@@ -209,7 +224,7 @@ function startVoiceSearch() {
     
     recognition.onerror = function(event) {
         if (event.error === 'not-allowed') {
-            alert(translations[currentLanguage].permissionDenied);
+            showNotFoundPopup(translations[currentLanguage].permissionDenied);
         }
         voiceBtn.classList.remove('listening');
     };

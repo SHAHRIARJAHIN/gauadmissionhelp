@@ -482,39 +482,33 @@ body.dark-mode {
 }
 /* Language Toggle */
 .language-toggle {
-  display: flex;
-  gap: 5px;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 5px;
-  border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .language-btn {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--text-dark);
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  font-weight: 500;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    background: var(--sky-blue-solid);
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.language-btn.active {
-  background: var(--sky-blue-solid);
-  color: white;
-  font-weight: bold;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* Dark mode language toggle */
 .dark-mode .language-btn {
-  background: rgba(30, 60, 90, 0.9);
-  color: var(--text-light);
+    background: #4285F4;
 }
 
-.dark-mode .language-btn.active {
+/* Animation for language toggle */
+.language-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
   background: #4285F4;
   color: white;
 }

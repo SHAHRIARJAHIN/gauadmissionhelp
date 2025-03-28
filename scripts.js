@@ -261,47 +261,39 @@ function speakLocationDetails() {
     speechSynthesis.speak(utterance);
 }
 
-// Toggle language
+// Modify the toggleLanguage function
 function toggleLanguage(lang) {
     if (lang === currentLanguage) return;
     
     currentLanguage = lang;
     translatePage(lang);
     
-    document.querySelectorAll('.language-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.lang === lang);
-    });
+    // Update the toggle button to show the opposite language
+    const toggleBtn = document.getElementById('languageToggleBtn');
+    toggleBtn.textContent = currentLanguage === 'en' ? 'BN' : 'EN';
+    toggleBtn.dataset.lang = currentLanguage === 'en' ? 'bn' : 'en';
     
     document.body.classList.toggle('bengali', lang === 'bn');
 }
 
-// Translate page
+// Update the translatePage function
 function translatePage(lang) {
     document.getElementById('mainHeading').textContent = translations[lang].title;
     document.getElementById('rollNumberInput').placeholder = translations[lang].placeholder;
     document.getElementById('findBtnText').textContent = translations[lang].findBtn;
     document.getElementById('directionBtnText').textContent = translations[lang].directionBtn;
+    
+    // Update toggle button text
+    document.getElementById('languageToggleBtn').textContent = 
+        lang === 'en' ? 'BN' : 'EN';
 }
 
-// Hide preloader
-window.addEventListener('load', function() {
-    setTimeout(function() {
-        document.getElementById('preloader').style.display = 'none';
-        document.getElementById('content').style.display = 'block';
-        map.invalidateSize();
-    }, 1000);
-});
-// Toggle language
-function toggleLanguage(lang) {
-    if (lang === currentLanguage) return;
+// Update the setupEventListeners function
+function setupEventListeners() {
+    // ... other event listeners ...
     
-    currentLanguage = lang;
-    translatePage(lang);
-    
-    // Update active state of buttons
-    document.querySelectorAll('.language-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.lang === lang);
+    // Language toggle
+    document.getElementById('languageToggleBtn').addEventListener('click', function() {
+        toggleLanguage(this.dataset.lang);
     });
-    
-    document.body.classList.toggle('bengali', lang === 'bn');
 }

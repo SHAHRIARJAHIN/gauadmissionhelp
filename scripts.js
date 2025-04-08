@@ -169,7 +169,7 @@ function findLocation() {
             className: 'custom-popup',
             autoPan: true,
             closeButton: false,
-            offset: L.point(0, -500),
+            offset: L.point(0, -50),
             maxWidth: 300
         }).openPopup();
         

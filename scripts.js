@@ -120,7 +120,7 @@ function setupEventListeners() {
     });
     
     // Directions button
-    document.getElementById('directionButton').addEventListener('click', openGoogleMaps);
+   // document.getElementById('directionButton').addEventListener('click', openGoogleMaps);
 }
 
 // Find location function

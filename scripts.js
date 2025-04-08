@@ -51,7 +51,7 @@ function initializeMap() {
     map = L.map('map', {
         zoomControl: false,
         preferCanvas: true
-    }).setView([24.036253972589652, 90.3977985470635], 16);
+    }).setView([24.036253972589652, 90.3977985470635],25);
 
     L.tileLayer(`https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}&key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao`, {
         maxZoom: 20,

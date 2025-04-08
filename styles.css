@@ -184,7 +184,7 @@ body.bengali {
 .leaflet-popup {
   left: 50% !important;
   transform: translateX(-50%) !important;
-  top: 180px !important;
+  top: 120px !important;
   bottom: auto !important;
   margin-bottom: 15px !important;
   z-index: 1001 !important;
